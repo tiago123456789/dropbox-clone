@@ -19,15 +19,24 @@ class FirebaseDatabase extends AbstractFirebase {
             return this.getFirebase()
                 .database()
                 .ref(this._collection)
-                .orderByChild(orderByField)
+                .orderByChild("isInative")
+                .equalTo(false)
                 .on("value", function (snapshot) {
+                    console.log(snapshot.val());
                     resolve(snapshot.val());
                 }, function (error) {
                     reject(error);
                 });
         });
-
     }
+
+    update(id, datasModified) {
+        return this.getFirebase()
+            .database()
+            .ref(`${this._collection}/${id}`)
+            .update(datasModified);
+    }
+
 }
 
 export default FirebaseDatabase;

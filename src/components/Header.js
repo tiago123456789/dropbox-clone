@@ -10,15 +10,7 @@ export default (props) => (
                         <h1 className="ax-visually-hidden">Meus Arquivos</h1>
                         <nav className="page-header-text u-l-fl" id="browse-location" aria-label="Hierarquia de pastas" role="navigation">
                             <span className="breadcrumb-segment__wrapper">
-                                <span className="ue-effect-container uee-BreadCrumbSegment-link-0">
-                                    <a href="https://www.dropbox.com/work" className="breadcrumb-segment">HCODE</a>
-                                </span>
-                                <svg width="24" height="24" viewBox="0 0 24 24" className="mc-icon-template-stateless" style={{ "top": "4px", "position": "relative" }}>
-                                    <title>arrow-right</title>
-                                    <path d="M10.414 7.05l4.95 4.95-4.95 4.95L9 15.534 12.536 12 9 8.464z" fill="#637282" fill-rule="evenodd"></path>
-                                </svg>
                             </span>
-                            <span>Avell</span>
                         </nav>
                     </span>
                 </span>
