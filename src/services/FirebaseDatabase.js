@@ -15,18 +15,18 @@ class FirebaseDatabase extends AbstractFirebase {
         return this._collection;
     }
 
-    create(datas) {
+    create(datas, owner) {
         return this.getFirebase()
             .database()
-            .ref(this._collection)
+            .ref(`${this._collection}/${owner}`)
             .push(datas);
     }
 
-    findAll(orderByField) {
+    findAll(orderByField, owner) {
         return new Promise((resolve, reject) => {
             return this.getFirebase()
                 .database()
-                .ref(this._collection)
+                .ref(`${this._collection}/${owner}`)
                 .orderByChild("isInative")
                 .equalTo(false)
                 .on("value", function (snapshot) {
@@ -37,10 +37,10 @@ class FirebaseDatabase extends AbstractFirebase {
         });
     }
 
-    update(id, datasModified) {
+    update(id, owner, datasModified) {
         return this.getFirebase()
             .database()
-            .ref(`${this._collection}/${id}`)
+            .ref(`${this._collection}/${owner}/${id}`)
             .update(datasModified);
     }
 

@@ -7,10 +7,11 @@ class FileTrashed {
     }
 
     findAll() {
+        const owner = localStorage.getItem("id");
         return new Promise((resolve, reject) => {
             return this._firebaseDatabase
                 .getDatabase()
-                .ref(this._firebaseDatabase.getCollection())
+                .ref(`${this._firebaseDatabase.getCollection()}/${owner}`)
                 .orderByChild("isInative")
                 .equalTo(true)
                 .on("value", function (snapshot) {

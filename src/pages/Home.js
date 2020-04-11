@@ -9,6 +9,7 @@ import FileUtil from "../util/File";
 import { v4 as uuidv4 } from 'uuid';
 import { confirmAlert } from 'react-confirm-alert';
 import DialogFileRename from "../components/DialogFileRename";
+import CONSTANTS from "../constantes/App";
 import toastr from "toastr";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '../assets/css/toastr.min.css';
@@ -33,6 +34,7 @@ class App extends Component {
         this.removeFiles = this.removeFiles.bind(this);
         this.unselectOrselectFile = this.unselectOrselectFile.bind(this);
         this.storeDataInFileCollection = this.storeDataInFileCollection.bind(this);
+        this.getIdUser = this.getIdUser.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
         this._firebaseStorageService = new FirebaseStorage();
         this._firebaseDatabaseService = new FirebaseDatabase("files");
@@ -60,23 +62,29 @@ class App extends Component {
             .map(file => {
                 const id = Object.keys(file)[0];
                 this._firebaseDatabaseService
-                    .update(id, { isInative: true })
-                    .then(console.log)
+                    .update(id, this.getIdUser(), { isInative: true })
                     .then(this.findAllFiles)
                     .catch(console.log)
             });
     }
 
     findAllFiles() {
-        this._firebaseDatabaseService.findAll("id")
+        this._firebaseDatabaseService.findAll("id", this.getIdUser())
             .then(this.setFilesInState)
             .catch(console.log);
+    }
+
+    getIdUser() {
+        return localStorage.getItem(CONSTANTS.LOCALSTORAGE_KEY.ID);
     }
 
     storeDataInFileCollection(uploadSnapshot) {
         const { contentType, name, type, size, timeCreated } = uploadSnapshot.metadata;
         this._firebaseDatabaseService.create(
-            { type, id: name, contentType, size, createdAt: timeCreated, isInative: false }
+            {
+                type, id: name, contentType, size, createdAt: timeCreated, isInative: false
+                    
+            }, this.getIdUser()  
         )
             .then(console.log)
             .catch(console.log)
@@ -180,7 +188,7 @@ class App extends Component {
         fileSelected = fileSelected[0];
         const id = Object.keys(fileSelected)[0];
         this._firebaseDatabaseService
-            .update(id, { name: this.state.newNameFile })
+            .update(id, this.getIdUser(), { name: this.state.newNameFile })
             .then(() => {
                 this.setState({ newNameFile: "" });
                 this.unselectOrselectFile(id);
