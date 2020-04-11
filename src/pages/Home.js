@@ -33,6 +33,7 @@ class App extends Component {
         this.removeFiles = this.removeFiles.bind(this);
         this.unselectOrselectFile = this.unselectOrselectFile.bind(this);
         this.storeDataInFileCollection = this.storeDataInFileCollection.bind(this);
+        this.downloadFile = this.downloadFile.bind(this);
         this._firebaseStorageService = new FirebaseStorage();
         this._firebaseDatabaseService = new FirebaseDatabase("files");
     }
@@ -187,6 +188,34 @@ class App extends Component {
             });
     }
 
+    downloadFile(filename) {
+        if (!this.isSelectedOneFile()) {
+            toastr.error(
+                "Is need select one file. Obs: You can select one file per time!", "",
+                { timeOut: 5000 });
+            return;
+        }
+
+        let fileSelected = this.state.files.filter(file => {
+            const key = Object.keys(file)[0];
+            return file[key].selected
+        });
+
+        fileSelected = fileSelected[0];
+        const key = Object.keys(fileSelected)[0];
+        filename = fileSelected[key]["id"];
+
+        this._firebaseStorageService.getDownloadUrl(filename)
+            .then(url => {
+                const a = document.createElement("a");
+                a.href = url;
+                a.target = "_blank";
+                a.click();
+                this.setState({ newNameFile: "" });
+                this.unselectOrselectFile(key);
+            });
+    }
+
     componentDidMount() {
         this.findAllFiles();
     }
@@ -205,8 +234,10 @@ class App extends Component {
                                     <br />
                                     {this.renderFiles()}
                                 </div>
-                                <input ref="file" type="file" className="hidden" onChange={this.handlerFile} />
+                                <input ref="file" type="file" className="hidden"
+                                    onChange={this.handlerFile} />
                                 <Options
+                                    downloadFile={this.downloadFile}
                                     openDialogFileRename={this.openDialogFileRename}
                                     removeFiles={this.removeFiles}
                                     openSelectOptionFile={this.openSelectOptionFile} />

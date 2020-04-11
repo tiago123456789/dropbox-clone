@@ -13,7 +13,8 @@ export default (props) => {
         contentRender = (
             <div className={`col-md-3 file ${file.selected == true ? 'file-selected' : ''}`}
             >
-                <i className="fa fa-file-image-o fa-5x" onClick={() => props.unselectOrselectFile(key)}></i>
+                <i className="fa fa-file-image-o fa-5x" 
+                    onClick={() => props.unselectOrselectFile(key)}></i>
                 <br/> 
                 <p>{filename}</p>
             </div>
