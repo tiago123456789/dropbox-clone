@@ -32,6 +32,7 @@
     "react": "^16.13.0",
     "react-confirm-alert": "^2.6.1",
     "react-dom": "^16.13.0",
+    "react-router-dom": "^5.1.2",
     "toastr": "^2.1.4",
     "uuid": "^7.0.3"
   }

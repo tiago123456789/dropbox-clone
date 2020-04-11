@@ -7,6 +7,14 @@ class FirebaseDatabase extends AbstractFirebase {
         this._collection = collection;
     }
 
+    getDatabase() {
+        return this.getFirebase().database();
+    }
+
+    getCollection() {
+        return this._collection;
+    }
+
     create(datas) {
         return this.getFirebase()
             .database()
@@ -22,7 +30,6 @@ class FirebaseDatabase extends AbstractFirebase {
                 .orderByChild("isInative")
                 .equalTo(false)
                 .on("value", function (snapshot) {
-                    console.log(snapshot.val());
                     resolve(snapshot.val());
                 }, function (error) {
                     reject(error);

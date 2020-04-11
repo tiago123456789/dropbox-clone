@@ -1,23 +1,17 @@
 import React, { Component } from "react";
-import Sidebar from "./components/Sidebar";
-import Options from "./components/Options";
-import Header from "./components/Header";
-import File from "./components/File";
-import FirebaseStorage from "./services/FirebaseStorage";
-import FirebaseDatabase from "./services/FirebaseDatabase";
-import FileUtil from "./util/File";
+import Sidebar from "../components/Sidebar";
+import Options from "../components/Options";
+import Header from "../components/Header";
+import File from "../components/File";
+import FirebaseStorage from "../services/FirebaseStorage";
+import FirebaseDatabase from "../services/FirebaseDatabase";
+import FileUtil from "../util/File";
 import { v4 as uuidv4 } from 'uuid';
 import { confirmAlert } from 'react-confirm-alert';
-import DialogFileRename from "./components/DialogFileRename";
+import DialogFileRename from "../components/DialogFileRename";
 import toastr from "toastr";
-import FilesTrashed from "./pages/FilesTrashed";
-import Home from "./pages/Home";
-import {
-    HashRouter as Router,
-    Switch, Route, Link
-} from "react-router-dom";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import './assets/css/toastr.min.css';
+import '../assets/css/toastr.min.css';
 
 class App extends Component {
 
@@ -91,6 +85,7 @@ class App extends Component {
         this._firebaseStorageService
             .uploadFile(uuidv4(), blob)
             .then(this.storeDataInFileCollection)
+            .then(this.findAllFiles)
             .catch(console.log)
     }
 
@@ -99,7 +94,6 @@ class App extends Component {
         FileUtil
             .transformFileToBlob(file)
             .then(this.storeInFireStorage)
-            .then(this.findAllFiles)
     }
 
     openSelectOptionFile() {
@@ -199,12 +193,28 @@ class App extends Component {
 
     render() {
         return (
-            <Router>
-                <Switch>
-                    <Route path="/home" component={Home} />
-                    <Route path="/file-trashed" component={FilesTrashed} />
-                </Switch>
-            </Router>
+            <div className="container-fluid">
+                <div className="row">
+                    <Sidebar />
+                    <main role="main"
+                        className="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+                        <Header />
+                        <section id="content-section">
+                            <div className="row">
+                                <div className="col-md-9">
+                                    <br />
+                                    {this.renderFiles()}
+                                </div>
+                                <input ref="file" type="file" className="hidden" onChange={this.handlerFile} />
+                                <Options
+                                    openDialogFileRename={this.openDialogFileRename}
+                                    removeFiles={this.removeFiles}
+                                    openSelectOptionFile={this.openSelectOptionFile} />
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            </div>
         )
     }
 }

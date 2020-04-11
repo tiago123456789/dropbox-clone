@@ -7,9 +7,11 @@ export default (props) => {
     const key = Object.keys(datas)[0];
     const file = datas[key];
     const filename = (file.name || file.id);
+    let contentRender = false;
+
     if (FileUtil.isImage(file.contentType)) {
-        return (
-            <div className={`file ${file.selected == true ? 'file-selected' : ''}`}
+        contentRender = (
+            <div className={`col-md-3 file ${file.selected == true ? 'file-selected' : ''}`}
             >
                 <i className="fa fa-file-image-o fa-5x" onClick={() => props.unselectOrselectFile(key)}></i>
                 <br/> 
@@ -17,24 +19,24 @@ export default (props) => {
             </div>
         );
     } else if (FileUtil.isPdf(file.contentType)) {
-        return (
-            <div className={`file ${file.selected == true ? 'file-selected' : ''}`}
+        contentRender = (
+            <div className={`col-md-3 file ${file.selected == true ? 'file-selected' : ''}`}
             >
                 <i className="fa fa-file-pdf-o fa-5x" onClick={() => props.unselectOrselectFile(key)}></i>
                 <p>{filename}</p>
             </div>
         );
     } else if (FileUtil.isAudio(file.contentType)) {
-        return (
-            <div className={`file ${file.selected == true ? 'file-selected' : ''}`}
+        contentRender = (
+            <div className={`col-md-3 file ${file.selected == true ? 'file-selected' : ''}`}
             >
                 <i className="fa fa-file-audio-o fa-5x" onClick={() => props.unselectOrselectFile(key)}></i>
                 <p>{filename}</p>
             </div>
         );
     } else if (FileUtil.isVideo(file.contentType)) {
-        return (
-            <div className={`file ${file.selected == true ? 'file-selected' : ''}`}
+        contentRender = (
+            <div className={`col-md-3 file ${file.selected == true ? 'file-selected' : ''}`}
             >
                 <i className="fa fa-file-video-o fa-5x" onClick={() => props.unselectOrselectFile(key)}></i>
                 <p>{filename}</p>
@@ -42,5 +44,5 @@ export default (props) => {
         );
     }
 
-    return false;
+    return contentRender;
 }
