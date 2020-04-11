@@ -1,5 +1,8 @@
-import React from "react"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
+import FirebaseAuth from "../services/FirebaseAuth";
+
+const firebaseAuthService = new FirebaseAuth();
 
 export default (props) => {
     return (
@@ -41,6 +44,15 @@ export default (props) => {
                                 <span className="ue-effect-container uee-FeatureNav-deletedFiles" data-reactid="42">
                                     <Link to="/file-trashed" className="maestro-nav__feature" data-reactid="43">
                                         Arquivos excluídos
+                                    </Link>
+                                </span>
+                            </div>
+                        </li>
+                        <li data-reactid="40">
+                            <div className="maestro-nav__feature-wrap" data-reactid="41">
+                                <span className="ue-effect-container uee-FeatureNav-deletedFiles" data-reactid="42">
+                                    <Link to="/auth" onClick={() => firebaseAuthService.logout()} className="maestro-nav__feature" data-reactid="43">
+                                        Logout
                                     </Link>
                                 </span>
                             </div>

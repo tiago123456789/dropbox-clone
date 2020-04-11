@@ -1,7 +1,8 @@
 const CONSTANTS = {
     "dev": {
-        API_URL: "http://www.omdbapi.com/",
-        API_KEY: "392361d1",
+        LOCALSTORAGE_KEY: {
+            ID: "id"
+        },
         TYPE_FILES: {
             IMAGE: [
                 "image/jpeg",
@@ -21,8 +22,9 @@ const CONSTANTS = {
     },
 
     "prd": {
-        API_URL: "http://www.omdbapi.com/",
-        API_KEY: "",
+        LOCALSTORAGE_KEY: {
+            ID: "id"
+        },
         TYPE_FILES: {
             IMAGE: [
                 "image/jpeg",
