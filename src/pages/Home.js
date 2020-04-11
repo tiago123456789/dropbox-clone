@@ -64,14 +64,13 @@ class App extends Component {
                 this._firebaseDatabaseService
                     .update(id, this.getIdUser(), { isInative: true })
                     .then(this.findAllFiles)
-                    .catch(console.log)
+                    .then(() => toastr.success('File removed success!', '', { timeOut: 5000 }))
             });
     }
 
     findAllFiles() {
         this._firebaseDatabaseService.findAll("id", this.getIdUser())
             .then(this.setFilesInState)
-            .catch(console.log);
     }
 
     getIdUser() {
@@ -85,9 +84,7 @@ class App extends Component {
                 type, id: name, contentType, size, createdAt: timeCreated, isInative: false
                     
             }, this.getIdUser()  
-        )
-            .then(console.log)
-            .catch(console.log)
+        );
     }
 
     storeInFireStorage(blob) {
@@ -95,7 +92,6 @@ class App extends Component {
             .uploadFile(uuidv4(), blob)
             .then(this.storeDataInFileCollection)
             .then(this.findAllFiles)
-            .catch(console.log)
     }
 
     handlerFile() {
@@ -103,6 +99,7 @@ class App extends Component {
         FileUtil
             .transformFileToBlob(file)
             .then(this.storeInFireStorage)
+            .then(() => toastr.success("Upload file success!", '', { timeOut: 5000 }));
     }
 
     openSelectOptionFile() {
@@ -193,6 +190,7 @@ class App extends Component {
                 this.setState({ newNameFile: "" });
                 this.unselectOrselectFile(id);
                 this.findAllFiles()
+                toastr.success("Rename file success!", "", { timeOut: 500 })
             });
     }
 
