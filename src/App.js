@@ -7,6 +7,7 @@ import {
     HashRouter as Router,
     Switch, Route, Link, Redirect
 } from "react-router-dom";
+import PrivateRoute from "./components/auth/PrivateRoute";
 
 class App extends Component {
 
@@ -14,10 +15,10 @@ class App extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route path="/home" component={Home} />
-                    <Route path="/file-trashed" component={FilesTrashed} />
-                    <Route path="/auth" component={Login} />  
-                    <Route path="/register" component={UserRegister} />  
+                    <PrivateRoute path="/home" component={Home} />
+                    <PrivateRoute path="/file-trashed" component={FilesTrashed} />
+                    <Route path="/auth" component={Login} />
+                    <Route path="/register" component={UserRegister} />
                     <Redirect from='*' to='/auth' />
                 </Switch>
             </Router>

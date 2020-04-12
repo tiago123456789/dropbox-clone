@@ -36,7 +36,6 @@ class Login extends Component {
     authenticate(user) {
         if (user) {
             localStorage.setItem(CONSTANTS.LOCALSTORAGE_KEY.ID, user.uid);
-            toastr.success("Welcome, authentication success!", '', { timeOut: 5000 });
             this.props.history.push("/home");
         }
     }

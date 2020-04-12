@@ -7,26 +7,26 @@ class FirebaseAuth extends AbstractFirebase {
     }
 
     logout() {
-       this.getFirebase().auth().signOut(); 
+        this.getFirebase().auth().signOut();
     }
 
     signIn(email, password) {
         return new Promise((resolve, reject) => {
             this.getFirebase()
-            .auth()
-            .signInWithEmailAndPassword(email, password)
-            .then(resolve)
-            .catch(reject);
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .then(resolve)
+                .catch(reject);
         });
     }
 
     signUp(email, password) {
         return new Promise((resolve, reject) => {
             this.getFirebase()
-            .auth()
-            .createUserWithEmailAndPassword(email, password)
-            .then(resolve)
-            .catch(reject);
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+                .then(resolve)
+                .catch(reject);
         });
     }
 
@@ -34,6 +34,10 @@ class FirebaseAuth extends AbstractFirebase {
         this.getFirebase()
             .auth()
             .onAuthStateChanged(callback);
+    }
+
+    isAuthenticated(userId) {
+       return this.getFirebase().auth().currentUser != null;
     }
 
 }
