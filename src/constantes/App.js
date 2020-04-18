@@ -23,7 +23,6 @@ const CONSTANTS = {
             ]
         }
     },
-
     "prd": {
         TOASTR_OPTIONS: {
             timeOut: 5000
