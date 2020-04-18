@@ -1,8 +1,8 @@
 import React from "react";
 
 export default (props) => (
-    <div class="react-confirm-alert">
-        <div class="react-confirm-alert-body">
+    <div className="react-confirm-alert">
+        <div className="react-confirm-alert-body">
             <h1>Wish file rename?</h1>
             <input className="form-control" 
                 onChange={(event) => props.changeValueInput("newNameFile", event.target.value)}

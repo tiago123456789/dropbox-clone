@@ -10,9 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { confirmAlert } from 'react-confirm-alert';
 import DialogFileRename from "../components/DialogFileRename";
 import CONSTANTS from "../constantes/App";
-import toastr from "toastr";
+import NotificationService from "../services/Notification";
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import '../assets/css/toastr.min.css';
 
 class App extends Component {
 
@@ -36,6 +35,7 @@ class App extends Component {
         this.storeDataInFileCollection = this.storeDataInFileCollection.bind(this);
         this.getIdUser = this.getIdUser.bind(this);
         this.downloadFile = this.downloadFile.bind(this);
+        this.getItemIdFirebase = this.getItemIdFirebase.bind(this);
         this._firebaseStorageService = new FirebaseStorage();
         this._firebaseDatabaseService = new FirebaseDatabase("files");
     }
@@ -43,7 +43,7 @@ class App extends Component {
     unselectOrselectFile(referenceFile) {
         let files = this.state.files;
         files = files.map(file => {
-            const key = Object.keys(file)[0];
+            const key = this.getItemIdFirebase(file);
             const isFileToSelect = key == referenceFile;
             if (isFileToSelect) {
                 file[key].selected = !file[key].selected;
@@ -53,18 +53,21 @@ class App extends Component {
         this.setState({ files });
     }
 
+    getItemIdFirebase(item) {
+        return Object.keys(item)[0]
+    }
+
     removeFiles() {
         let files = this.state.files;
         files = files.filter(file => {
-            const key = Object.keys(file)[0];
-            return file[key].selected
+            return file[this.getItemIdFirebase(file)].selected
         })
             .map(file => {
-                const id = Object.keys(file)[0];
+                const id = this.getItemIdFirebase(file);
                 this._firebaseDatabaseService
                     .update(id, this.getIdUser(), { isInative: true })
                     .then(this.findAllFiles)
-                    .then(() => toastr.success('File removed success!', '', { timeOut: 5000 }))
+                    .then(() => NotificationService.success('File removed success!'))
             });
     }
 
@@ -82,8 +85,8 @@ class App extends Component {
         this._firebaseDatabaseService.create(
             {
                 type, id: name, contentType, size, createdAt: timeCreated, isInative: false
-                    
-            }, this.getIdUser()  
+
+            }, this.getIdUser()
         );
     }
 
@@ -99,7 +102,7 @@ class App extends Component {
         FileUtil
             .transformFileToBlob(file)
             .then(this.storeInFireStorage)
-            .then(() => toastr.success("Upload file success!", '', { timeOut: 5000 }));
+            .then(() => NotificationService.success("Upload file success!"));
     }
 
     openSelectOptionFile() {
@@ -131,7 +134,7 @@ class App extends Component {
 
     openDialogFileRename() {
         if (!this.isSelectedOneFile()) {
-            toastr.error("Is need select one file. Obs: You can select one file per time!", "", { timeOut: 5000 });
+            NotificationService.error("Is need select one file. Obs: You can select one file per time!");
             return;
         }
 
@@ -169,8 +172,7 @@ class App extends Component {
 
     isSelectedOneFile() {
         const filesSelected = this.state.files.filter(file => {
-            const key = Object.keys(file)[0];
-            return file[key].selected
+            return file[this.getItemIdFirebase(file)].selected
         });
 
         return filesSelected.length == 1;
@@ -178,45 +180,38 @@ class App extends Component {
 
     renameFile() {
         let fileSelected = this.state.files.filter(file => {
-            const key = Object.keys(file)[0];
-            return file[key].selected
+            return file[this.getItemIdFirebase(file)].selected
         });
 
         fileSelected = fileSelected[0];
-        const id = Object.keys(fileSelected)[0];
+        const id = this.getItemIdFirebase(fileSelected);
         this._firebaseDatabaseService
             .update(id, this.getIdUser(), { name: this.state.newNameFile })
             .then(() => {
                 this.setState({ newNameFile: "" });
                 this.unselectOrselectFile(id);
-                this.findAllFiles()
-                toastr.success("Rename file success!", "", { timeOut: 500 })
+                this.findAllFiles();
+                NotificationService.success("Rename file success!");
             });
     }
 
     downloadFile(filename) {
         if (!this.isSelectedOneFile()) {
-            toastr.error(
-                "Is need select one file. Obs: You can select one file per time!", "",
-                { timeOut: 5000 });
+            NotificationService.error("Is need select one file. Obs: You can select one file per time!");
             return;
         }
 
         let fileSelected = this.state.files.filter(file => {
-            const key = Object.keys(file)[0];
-            return file[key].selected
+            return file[this.getItemIdFirebase(file)].selected
         });
 
         fileSelected = fileSelected[0];
-        const key = Object.keys(fileSelected)[0];
+        const key = this.getItemIdFirebase(fileSelected);
         filename = fileSelected[key]["id"];
 
         this._firebaseStorageService.getDownloadUrl(filename)
             .then(url => {
-                const a = document.createElement("a");
-                a.href = url;
-                a.target = "_blank";
-                a.click();
+                FileUtil.download(url);
                 this.setState({ newNameFile: "" });
                 this.unselectOrselectFile(key);
             });

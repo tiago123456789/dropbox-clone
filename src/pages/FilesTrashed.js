@@ -30,7 +30,6 @@ class FilesTrashed extends Component {
     findAllFiles() {
         this._fileTrashedService.findAll()
             .then(this.setFilesInState)
-            .catch(console.log);
     }
 
     renderFiles() {

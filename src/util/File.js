@@ -21,6 +21,13 @@ class File {
         });
     }
 
+    static download(url) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.click();
+    }
+
     static _isTypeFileExpected(type, expectedTypes) {
         const valueIndicatingNotExpectedType = -1;
         return expectedTypes.indexOf(type) > valueIndicatingNotExpectedType;

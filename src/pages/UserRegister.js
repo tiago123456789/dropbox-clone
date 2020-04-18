@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "../assets/css/login.css";
 import FirebaseAuth from "../services/FirebaseAuth";
 import CONSTANTS from "../constantes/App";
-import toastr from "toastr";
+import NotificationService from "../services/Notification";
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import '../assets/css/toastr.min.css';
 
@@ -27,11 +27,11 @@ class Login extends Component {
         this._firebaseAuthService
             .signUp(this.state.email, this.state.password)
             .then(() => {
-                toastr.success("User register success!", '', { timeOut: 5000 });
+                NotificationService.success("User register success!");
                 this.props.history.push("/auth")
             })
             .catch((error) => {
-                toastr.error(error.message, '', { timeOut: 5000 });
+                NotificationService.error(error.message);
             });
     }
 

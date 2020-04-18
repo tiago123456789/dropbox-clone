@@ -1,5 +1,8 @@
 const CONSTANTS = {
     "dev": {
+        TOASTR_OPTIONS: {
+            timeOut: 5000
+        },
         LOCALSTORAGE_KEY: {
             ID: "id"
         },
@@ -22,6 +25,9 @@ const CONSTANTS = {
     },
 
     "prd": {
+        TOASTR_OPTIONS: {
+            timeOut: 5000
+        },
         LOCALSTORAGE_KEY: {
             ID: "id"
         },
